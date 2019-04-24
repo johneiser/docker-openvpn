@@ -1,9 +1,13 @@
 # Original credit: https://github.com/jpetazzo/dockvpn
 
 # Smallest base image
-FROM python:3-alpine
+FROM python:3
 
 LABEL maintainer="Kyle Manna <kyle@kylemanna.com>"
+
+# Common python libraries
+RUN pip install --upgrade pip && \
+    pip install psycopg2
 
 # Testing: pamtester
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories && \
