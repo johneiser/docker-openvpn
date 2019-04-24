@@ -5,15 +5,18 @@ FROM python:3
 
 LABEL maintainer="Kyle Manna <kyle@kylemanna.com>"
 
-# Common python libraries
-RUN pip install --upgrade pip && \
-    pip install psycopg2
-
 # Testing: pamtester
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories && \
     apk add --update openvpn iptables bash easy-rsa openvpn-auth-pam google-authenticator pamtester && \
     ln -s /usr/share/easy-rsa/easyrsa /usr/local/bin && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/*
+
+# Python library prerequisites
+RUN apk add alpine-sdk postgresql-dev
+
+# Common python libraries
+RUN pip install --upgrade pip && \
+    pip install psycopg2
 
 # Needed by scripts
 ENV OPENVPN /etc/openvpn
