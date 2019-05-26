@@ -16,7 +16,7 @@ RUN apk add alpine-sdk postgresql-dev
 
 # Common python libraries
 RUN pip install --upgrade pip && \
-    pip install psycopg2 django
+    pip install psycopg2 django requests
 
 # Needed by scripts
 ENV OPENVPN /etc/openvpn
