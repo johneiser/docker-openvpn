@@ -39,9 +39,14 @@ function addArg {
 # this allows rules/routing to be altered by supplying this function
 # in an included file, such as ovpn_env.sh
 function setupIptablesAndRouting {
+    for i in "${OVPN_AROUTES[@]}"; do
+        iptables -C FORWARD -s $OVPN_SERVER -d "$i" -j ACCEPT || {
+	  iptables -A FORWARD -s $OVPN_SERVER -d "$i" -j ACCEPT
+	}
+    done
     for i in "${OVPN_XROUTES[@]}"; do
-        iptables -t nat -C POSTROUTING -s $OVPN_SERVER -d "$i" -j DROP || {
-          iptables -t nat -A POSTROUTING -s $OVPN_SERVER -d "$i" -j DROP
+        iptables -C FORWARD -s $OVPN_SERVER -d "$i" -j DROP || {
+          iptables -A FORWARD -s $OVPN_SERVER -d "$i" -j DROP
         }
     done
     iptables -t nat -C POSTROUTING -s $OVPN_SERVER -o $OVPN_NATDEVICE -j MASQUERADE || {
