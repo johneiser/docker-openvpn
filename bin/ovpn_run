@@ -47,6 +47,11 @@ function setupIptablesAndRouting {
           iptables -t nat -A POSTROUTING -s "$i" -o $OVPN_NATDEVICE -j MASQUERADE
         }
     done
+    for i in "${OVPN_XROUTES[@]}"; do
+        iptables -t nat -C POSTROUTING -s $OVPN_SERVER -d "$i" -j DROP || {
+	  iptables -t nat -A POSTROUTING -s $OVPN_SERVER -d "$i" -j DROP
+	}
+    done
 }
 
 
